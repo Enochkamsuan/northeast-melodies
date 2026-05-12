@@ -34,15 +34,14 @@ export default function Hero() {
 
   // Auto-advance when track ends
   useEffect(() => {
-    if (elapsed === 0 && playing) return;
     if (elapsed >= TRACK_SECONDS - 1) {
-      setIndex((i) => (i + 1) % SONGS.length);
-      setElapsed(0);
+      const nextSong = SONGS[(index + 1) % SONGS.length];
+      setCurrentSong(nextSong.id);
     }
-  }, [elapsed, playing]);
+  }, [elapsed, index]);
 
-  const next = () => { setIndex((i) => (i + 1) % SONGS.length); setElapsed(0); };
-  const prev = () => { setIndex((i) => (i - 1 + SONGS.length) % SONGS.length); setElapsed(0); };
+  const next = () => setCurrentSong(SONGS[(index + 1) % SONGS.length].id);
+  const prev = () => setCurrentSong(SONGS[(index - 1 + SONGS.length) % SONGS.length].id);
   const openPlayer = () => navigate({ to: "/player/$songId", params: { songId: String(song.id) } });
 
   const pct = (elapsed / TRACK_SECONDS) * 100;
