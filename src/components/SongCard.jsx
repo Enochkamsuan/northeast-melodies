@@ -1,20 +1,26 @@
 import { Play } from "lucide-react";
 
-const COVER_GRADIENTS = [
-  "from-emerald-500 to-teal-700",
-  "from-violet-500 to-fuchsia-700",
-  "from-amber-500 to-orange-700",
-  "from-rose-500 to-pink-700",
-  "from-indigo-500 to-blue-700",
-  "from-lime-500 to-emerald-700",
-];
+// Fallback image used when a song has no `cover` set.
+const FALLBACK_COVER =
+  "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=600&q=80";
 
-export default function SongCard({ song, index = 0 }) {
-  const grad = COVER_GRADIENTS[index % COVER_GRADIENTS.length];
+export default function SongCard({ song }) {
+  const cover = song.cover || FALLBACK_COVER;
   return (
     <article className="group relative overflow-hidden rounded-2xl border border-border bg-card p-4 transition hover:-translate-y-1 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/10">
+<<<<<<< HEAD
       <div className={`relative aspect-square overflow-hidden rounded-xl bg-linear-to-br ${grad}`}>
         <div className="absolute inset-0 opacity-30 [background-image:radial-linear(circle_at_30%_20%,white,transparent_40%)]" />
+=======
+      <div className="relative aspect-square overflow-hidden rounded-xl bg-muted">
+        <img
+          src={cover}
+          alt={`${song.artist} — ${song.title}`}
+          loading="lazy"
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-70" />
+>>>>>>> d2dd8388f9052fc537fbf502d0a683e7c8ab768c
         <button
           aria-label={`Play ${song.title}`}
           className="absolute bottom-3 right-3 grid h-12 w-12 translate-y-3 place-items-center rounded-full bg-primary text-primary-foreground opacity-0 shadow-xl transition-all group-hover:translate-y-0 group-hover:opacity-100"
