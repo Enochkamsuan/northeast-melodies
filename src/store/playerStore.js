@@ -1,14 +1,16 @@
 import { useSyncExternalStore } from "react";
-import { SONGS } from "../data/mockSongs";
 
 const KEY = "lairikbeats:nowplaying";
 
+<<<<<<< HEAD
 const defaultState = { songId: SONGS[0]?.id ?? null };
 
 let state = defaultState;
+=======
+let state = { songId: null };
+>>>>>>> 0dbc15a7aa37911aa3101562aeb11b4aa0bea42f
 const listeners = new Set();
 
-// Hydrate from localStorage on the client
 if (typeof window !== "undefined") {
   try {
     const raw = window.localStorage.getItem(KEY);
@@ -42,10 +44,14 @@ function subscribe(listener) {
   return () => listeners.delete(listener);
 }
 
-function getSnapshot() {
-  return state;
+const getSnapshot = () => state;
+const getServerSnapshot = () => ({ songId: null });
+
+export function useCurrentSongId() {
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot).songId;
 }
 
+<<<<<<< HEAD
 function getServerSnapshot() {
   return defaultState;
 }
@@ -58,3 +64,12 @@ export function useCurrentSong() {
 
   return song;
 }
+=======
+// Resolve current song from a provided songs list (so consumers stay decoupled
+// from the data source — Spotify, mock, etc.)
+export function useCurrentSong(songs) {
+  const id = useCurrentSongId();
+  if (!songs?.length) return null;
+  return songs.find((x) => String(x.id) === String(id)) || songs[0];
+}
+>>>>>>> 0dbc15a7aa37911aa3101562aeb11b4aa0bea42f
