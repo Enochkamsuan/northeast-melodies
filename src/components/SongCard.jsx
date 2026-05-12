@@ -1,5 +1,6 @@
 import { Play } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
+import { setCurrentSong } from "../store/playerStore";
 
 const FALLBACK_COVER =
   "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=600&q=80";
@@ -7,7 +8,10 @@ const FALLBACK_COVER =
 export default function SongCard({ song }) {
   const cover = song.cover || FALLBACK_COVER;
   const navigate = useNavigate();
-  const open = () => navigate({ to: "/player/$songId", params: { songId: String(song.id) } });
+  const open = () => {
+    setCurrentSong(song.id);
+    navigate({ to: "/player/$songId", params: { songId: String(song.id) } });
+  };
   return (
     <article
       onClick={open}
