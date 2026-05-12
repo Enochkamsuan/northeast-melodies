@@ -25,13 +25,14 @@ export default function SearchMusic() {
   const [genre, setGenre] = useState("");
   const [dialect, setDialect] = useState("");
   const [mood, setMood] = useState("");
+  const { songs, isLoading } = useSongs();
 
   const results = useMemo(() => {
-    return SONGS.filter((s) => {
+    return songs.filter((s) => {
       const matchQ = q ? (s.title + s.artist).toLowerCase().includes(q.toLowerCase()) : true;
       return matchQ && (!genre || s.genre === genre) && (!dialect || s.dialect === dialect) && (!mood || s.mood === mood);
     });
-  }, [q, genre, dialect, mood]);
+  }, [q, genre, dialect, mood, songs]);
 
   return (
     <section id="explore" className="mx-auto max-w-7xl px-6 py-20">
