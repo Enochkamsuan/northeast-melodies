@@ -15,7 +15,7 @@ export default function DialectSection() {
           <a
             key={d.name}
             href="#explore"
-            className={`group relative h-44 overflow-hidden rounded-2xl border border-border bg-gradient-to-br ${d.hue} p-5 transition hover:-translate-y-1 hover:border-primary/40`}
+            className={`group relative h-44 overflow-hidden rounded-2xl border border-border bg-linear-to-br ${d.hue} p-5 transition hover:-translate-y-1 hover:border-primary/40`}
           >
             <div className="absolute -right-6 -top-6 h-28 w-28 rounded-full bg-white/10 blur-2xl" />
             <p className="text-xs uppercase tracking-widest text-foreground/70">{d.tag}</p>
