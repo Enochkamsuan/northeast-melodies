@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Play, Pause, Sparkles, Disc3, SkipForward, SkipBack } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
-import { SONGS } from "../data/mockSongs";
+import { useSongs } from "../hooks/useSongs";
 import { setCurrentSong, useCurrentSong } from "../store/playerStore";
 
 const TRACK_SECONDS = 248; // 4:08
