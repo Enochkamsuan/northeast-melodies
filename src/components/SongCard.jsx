@@ -13,8 +13,8 @@ export default function SongCard({ song, index = 0 }) {
   const grad = COVER_GRADIENTS[index % COVER_GRADIENTS.length];
   return (
     <article className="group relative overflow-hidden rounded-2xl border border-border bg-card p-4 transition hover:-translate-y-1 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/10">
-      <div className={`relative aspect-square overflow-hidden rounded-xl bg-gradient-to-br ${grad}`}>
-        <div className="absolute inset-0 opacity-30 [background-image:radial-gradient(circle_at_30%_20%,white,transparent_40%)]" />
+      <div className={`relative aspect-square overflow-hidden rounded-xl bg-linear-to-br ${grad}`}>
+        <div className="absolute inset-0 opacity-30 [background-image:radial-linear(circle_at_30%_20%,white,transparent_40%)]" />
         <button
           aria-label={`Play ${song.title}`}
           className="absolute bottom-3 right-3 grid h-12 w-12 translate-y-3 place-items-center rounded-full bg-primary text-primary-foreground opacity-0 shadow-xl transition-all group-hover:translate-y-0 group-hover:opacity-100"

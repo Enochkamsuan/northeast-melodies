@@ -40,12 +40,12 @@ export default function Hero() {
         </div>
 
         <div className="relative">
-          <div className="absolute -inset-6 rounded-[2rem] bg-gradient-to-br from-emerald/30 via-violet/30 to-tribal/30 blur-2xl" />
+          <div className="absolute -inset-6 rounded-4xl bg-linear-to-br from-emerald/30 via-violet/30 to-tribal/30 blur-2xl" />
           <div className="relative glass rounded-3xl p-6 shadow-2xl">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-emerald to-violet">
-                  <Disc3 size={22} className="animate-spin text-primary-foreground [animation-duration:6s]" />
+                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-linear-to-br from-emerald to-violet">
+                  <Disc3 size={22} className="animate-spin text-primary-foreground animation-duration-[6s]" />
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-widest text-muted-foreground">Now Playing</p>
@@ -60,7 +60,7 @@ export default function Hero() {
                 {Array.from({ length: 32 }).map((_, i) => (
                   <span
                     key={i}
-                    className="flex-1 rounded-sm bg-gradient-to-t from-emerald via-violet to-tribal"
+                    className="flex-1 rounded-sm bg-linear-to-t from-emerald via-violet to-tribal"
                     style={{
                       height: `${20 + Math.abs(Math.sin(i * 0.6)) * 80}%`,
                       opacity: 0.5 + (i % 4) * 0.15,
@@ -69,7 +69,7 @@ export default function Hero() {
                 ))}
               </div>
               <div className="mt-4 h-1 w-full overflow-hidden rounded-full bg-secondary">
-                <div className="h-full w-2/5 rounded-full bg-gradient-to-r from-emerald to-violet" />
+                <div className="h-full w-2/5 rounded-full bg-linear-to-r from-emerald to-violet" />
               </div>
               <div className="mt-2 flex justify-between text-xs text-muted-foreground">
                 <span>1:42</span><span>4:08</span>
