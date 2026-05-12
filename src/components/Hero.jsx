@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Play, Pause, Sparkles, Disc3, SkipForward, SkipBack } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
-import { SONGS } from "../data/mockSongs";
+import { useSongs } from "../hooks/useSongs";
 import { setCurrentSong, useCurrentSong } from "../store/playerStore";
 
 const TRACK_SECONDS = 248; // 4:08
@@ -14,16 +14,14 @@ function fmt(sec) {
 
 export default function Hero() {
   const navigate = useNavigate();
-  const song = useCurrentSong();
-  const index = Math.max(0, SONGS.findIndex((s) => s.id === song.id));
+  const { songs } = useSongs();
+  const song = useCurrentSong(songs);
+  const index = song ? Math.max(0, songs.findIndex((s) => s.id === song.id)) : 0;
   const [playing, setPlaying] = useState(true);
   const [elapsed, setElapsed] = useState(0);
 
-  // Reset progress whenever the active song changes
-  useEffect(() => { setElapsed(0); }, [song.id]);
+  useEffect(() => { setElapsed(0); }, [song?.id]);
 
-
-  // Tick progress
   useEffect(() => {
     if (!playing) return;
     const id = setInterval(() => {
@@ -32,16 +30,18 @@ export default function Hero() {
     return () => clearInterval(id);
   }, [playing]);
 
-  // Auto-advance when track ends
   useEffect(() => {
+    if (!songs.length) return;
     if (elapsed >= TRACK_SECONDS - 1) {
-      const nextSong = SONGS[(index + 1) % SONGS.length];
+      const nextSong = songs[(index + 1) % songs.length];
       setCurrentSong(nextSong.id);
     }
-  }, [elapsed, index]);
+  }, [elapsed, index, songs]);
 
-  const next = () => setCurrentSong(SONGS[(index + 1) % SONGS.length].id);
-  const prev = () => setCurrentSong(SONGS[(index - 1 + SONGS.length) % SONGS.length].id);
+  if (!song) return null;
+
+  const next = () => setCurrentSong(songs[(index + 1) % songs.length].id);
+  const prev = () => setCurrentSong(songs[(index - 1 + songs.length) % songs.length].id);
   const openPlayer = () => navigate({ to: "/player/$songId", params: { songId: String(song.id) } });
 
   const pct = (elapsed / TRACK_SECONDS) * 100;
