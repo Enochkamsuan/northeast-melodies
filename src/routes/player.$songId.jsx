@@ -1,10 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Heart, Bookmark, Shuffle, Repeat, ListMusic, Mic2,
   Play, Pause, Square, SkipBack, SkipForward,
 } from "lucide-react";
 import { SONGS } from "../data/mockSongs";
+import { setCurrentSong } from "../store/playerStore";
 
 export const Route = createFileRoute("/player/$songId")({
   component: PlayerPage,
