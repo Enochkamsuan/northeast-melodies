@@ -74,7 +74,7 @@ function PlayerPage() {
 
       <main className="mx-auto grid max-w-7xl gap-8 px-6 py-10 lg:grid-cols-[1.2fr_1fr]">
         {/* Now Playing */}
-        <section className="glass rounded-3xl p-6 sm:p-8">
+        <section className="glass rounded-3xl">
           <div className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-2xl bg-muted shadow-2xl shadow-primary/20">
             <img
               src={song.cover || FALLBACK_COVER}

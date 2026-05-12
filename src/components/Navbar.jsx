@@ -9,7 +9,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 glass">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <a href="#" className="flex items-center gap-2">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-emerald to-violet text-primary-foreground">
+          <span className="grid h-9 w-9 place-items-center rounded-xl bg-linear-to-br from-emerald to-violet text-primary-foreground">
             <Music2 size={18} />
           </span>
           <span className="text-lg font-semibold tracking-tight">
