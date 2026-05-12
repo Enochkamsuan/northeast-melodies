@@ -37,12 +37,12 @@ const MOCK_LYRICS = [
 function PlayerPage() {
   const { songId } = Route.useParams();
   const navigate = useNavigate();
+  const { songs, isLoading } = useSongs();
 
-  const index = SONGS.findIndex((s) => String(s.id) === String(songId));
-  const song = index >= 0 ? SONGS[index] : SONGS[0];
+  const index = songs.findIndex((s) => String(s.id) === String(songId));
+  const song = index >= 0 ? songs[index] : songs[0];
 
-  // Keep the global "now playing" in sync with the visited track
-  useEffect(() => { setCurrentSong(song.id); }, [song.id]);
+  useEffect(() => { if (song) setCurrentSong(song.id); }, [song?.id]);
 
   const [playing, setPlaying] = useState(true);
   const [progress, setProgress] = useState(32);
@@ -54,18 +54,28 @@ function PlayerPage() {
   const [showQueue, setShowQueue] = useState(true);
 
   const queue = useMemo(() => {
-    const rest = SONGS.filter((s) => s.id !== song.id);
+    if (!song) return [];
+    const rest = songs.filter((s) => s.id !== song.id);
     return shuffle ? [...rest].sort(() => Math.random() - 0.5) : rest;
-  }, [song.id, shuffle]);
+  }, [song?.id, shuffle, songs]);
 
   const goTo = (id) => navigate({ to: "/player/$songId", params: { songId: String(id) } });
-  const next = () => goTo(queue[0]?.id ?? song.id);
+  const next = () => goTo(queue[0]?.id ?? song?.id);
   const prev = () => {
-    const i = SONGS.findIndex((s) => s.id === song.id);
-    const p = SONGS[(i - 1 + SONGS.length) % SONGS.length];
+    if (!song) return;
+    const i = songs.findIndex((s) => s.id === song.id);
+    const p = songs[(i - 1 + songs.length) % songs.length];
     goTo(p.id);
   };
   const stop = () => { setPlaying(false); setProgress(0); };
+
+  if (!song) {
+    return (
+      <div className="grid min-h-screen place-items-center bg-background text-muted-foreground">
+        {isLoading ? "Loading track…" : "Track not found"}
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground">
