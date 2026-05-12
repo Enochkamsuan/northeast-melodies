@@ -4,7 +4,7 @@ import {
   Heart, Bookmark, Shuffle, Repeat, ListMusic, Mic2,
   Play, Pause, Square, SkipBack, SkipForward,
 } from "lucide-react";
-import { SONGS } from "../data/mockSongs";
+import { useSongs } from "../hooks/useSongs";
 import { setCurrentSong } from "../store/playerStore";
 
 export const Route = createFileRoute("/player/$songId")({
