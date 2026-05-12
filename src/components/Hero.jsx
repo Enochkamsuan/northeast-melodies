@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Play, Pause, Sparkles, Disc3, SkipForward, SkipBack } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { SONGS } from "../data/mockSongs";
+import { setCurrentSong, useCurrentSong } from "../store/playerStore";
 
 const TRACK_SECONDS = 248; // 4:08
 
@@ -13,11 +14,14 @@ function fmt(sec) {
 
 export default function Hero() {
   const navigate = useNavigate();
-  const [index, setIndex] = useState(0);
+  const song = useCurrentSong();
+  const index = Math.max(0, SONGS.findIndex((s) => s.id === song.id));
   const [playing, setPlaying] = useState(true);
   const [elapsed, setElapsed] = useState(0);
 
-  const song = SONGS[index];
+  // Reset progress whenever the active song changes
+  useEffect(() => { setElapsed(0); }, [song.id]);
+
 
   // Tick progress
   useEffect(() => {
