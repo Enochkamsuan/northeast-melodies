@@ -1,26 +1,34 @@
 import { createFileRoute } from "@tanstack/react-router";
+import Navbar from "../components/Navbar.jsx";
+import Hero from "../components/Hero.jsx";
+import SearchMusic from "../components/SearchMusic.jsx";
+import DialectSection from "../components/DialectSection.jsx";
+import GenreSection from "../components/GenreSection.jsx";
+import WhySection from "../components/WhySection.jsx";
+import Footer from "../components/Footer.jsx";
 
 export const Route = createFileRoute("/")({
   component: Index,
+  head: () => ({
+    meta: [
+      { title: "LairikBeats — Northeast Indian Music Streaming" },
+      { name: "description", content: "Discover and stream Northeast Indian music by dialect, genre and mood — Nagamese, Manipuri, Tangkhul, Kuki, Rongmei, Liangmei and Zeme." },
+    ],
+  }),
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
+function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background text-foreground">
+      <Navbar />
+      <main>
+        <Hero />
+        <SearchMusic />
+        <DialectSection />
+        <GenreSection />
+        <WhySection />
+      </main>
+      <Footer />
     </div>
   );
-}
-
-function Index() {
-  return <PlaceholderIndex />;
 }
