@@ -2,19 +2,33 @@ export const DIALECTS = ["Nagamese", "Manipuri", "Tangkhul", "Kuki", "Rongmei", 
 export const GENRES = ["Gospel", "Love Song", "Festive Mode", "Party Mode", "Folk", "Worship", "Acoustic"];
 export const MOODS = ["Worship", "Romantic", "Festive", "Party", "Chill", "Uplifting", "Reflective"];
 
+// Placeholder artist images (royalty-free portraits from Unsplash).
+// Replace `cover` with real artist artwork when wiring the API.
 export const SONGS = [
-  { id: 1, title: "Hingmi Khangai", artist: "Awungshi K.", dialect: "Tangkhul", genre: "Gospel", mood: "Worship" },
-  { id: 2, title: "Imphal Nights", artist: "Lairen", dialect: "Manipuri", genre: "Party Mode", mood: "Party" },
-  { id: 3, title: "Moa Ahire", artist: "Along & Co.", dialect: "Nagamese", genre: "Love Song", mood: "Romantic" },
-  { id: 4, title: "Ka Lawm Che", artist: "Sangpui", dialect: "Kuki", genre: "Folk", mood: "Reflective" },
-  { id: 5, title: "Riamei Ho", artist: "Gaichuanlung", dialect: "Rongmei", genre: "Festive Mode", mood: "Festive" },
-  { id: 6, title: "Heraka Calling", artist: "Zeliang Voices", dialect: "Zeme", genre: "Worship", mood: "Uplifting" },
-  { id: 7, title: "Pamei Lullaby", artist: "Liangmai Trio", dialect: "Liangmei", genre: "Acoustic", mood: "Chill" },
-  { id: 8, title: "Eigi Nungshibi", artist: "Thoibi", dialect: "Manipuri", genre: "Love Song", mood: "Romantic" },
-  { id: 9, title: "Hill Bonfire", artist: "Naga Collective", dialect: "Nagamese", genre: "Festive Mode", mood: "Festive" },
-  { id: 10, title: "Khankho Lyrics", artist: "Haokip", dialect: "Kuki", genre: "Gospel", mood: "Worship" },
-  { id: 11, title: "Tangkhul Sunrise", artist: "Shimreichon", dialect: "Tangkhul", genre: "Acoustic", mood: "Chill" },
-  { id: 12, title: "Rongmei Drums", artist: "Pamei", dialect: "Rongmei", genre: "Folk", mood: "Uplifting" },
+  { id: 1, title: "Hingmi Khangai", artist: "Awungshi K.", dialect: "Tangkhul", genre: "Gospel", mood: "Worship",
+    cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&q=80" },
+  { id: 2, title: "Imphal Nights", artist: "Lairen", dialect: "Manipuri", genre: "Party Mode", mood: "Party",
+    cover: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80" },
+  { id: 3, title: "Moa Ahire", artist: "Along & Co.", dialect: "Nagamese", genre: "Love Song", mood: "Romantic",
+    cover: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=600&q=80" },
+  { id: 4, title: "Ka Lawm Che", artist: "Sangpui", dialect: "Kuki", genre: "Folk", mood: "Reflective",
+    cover: "https://images.unsplash.com/photo-1520975922323-9ea7f3f86f7a?w=600&q=80" },
+  { id: 5, title: "Riamei Ho", artist: "Gaichuanlung", dialect: "Rongmei", genre: "Festive Mode", mood: "Festive",
+    cover: "https://images.unsplash.com/photo-1549213783-8284d0336c4f?w=600&q=80" },
+  { id: 6, title: "Heraka Calling", artist: "Zeliang Voices", dialect: "Zeme", genre: "Worship", mood: "Uplifting",
+    cover: "https://images.unsplash.com/photo-1501612780327-45045538702b?w=600&q=80" },
+  { id: 7, title: "Pamei Lullaby", artist: "Liangmai Trio", dialect: "Liangmei", genre: "Acoustic", mood: "Chill",
+    cover: "https://images.unsplash.com/photo-1520986606214-8b456906c813?w=600&q=80" },
+  { id: 8, title: "Eigi Nungshibi", artist: "Thoibi", dialect: "Manipuri", genre: "Love Song", mood: "Romantic",
+    cover: "https://images.unsplash.com/photo-1534126511673-b6899657816a?w=600&q=80" },
+  { id: 9, title: "Hill Bonfire", artist: "Naga Collective", dialect: "Nagamese", genre: "Festive Mode", mood: "Festive",
+    cover: "https://images.unsplash.com/photo-1499415479124-43c32433a620?w=600&q=80" },
+  { id: 10, title: "Khankho Lyrics", artist: "Haokip", dialect: "Kuki", genre: "Gospel", mood: "Worship",
+    cover: "https://images.unsplash.com/photo-1485579149621-3123dd979885?w=600&q=80" },
+  { id: 11, title: "Tangkhul Sunrise", artist: "Shimreichon", dialect: "Tangkhul", genre: "Acoustic", mood: "Chill",
+    cover: "https://images.unsplash.com/photo-1487180144351-b8472da7d491?w=600&q=80" },
+  { id: 12, title: "Rongmei Drums", artist: "Pamei", dialect: "Rongmei", genre: "Folk", mood: "Uplifting",
+    cover: "https://images.unsplash.com/photo-1524650359799-842906ca1c06?w=600&q=80" },
 ];
 
 export const FEATURED_DIALECTS = [
