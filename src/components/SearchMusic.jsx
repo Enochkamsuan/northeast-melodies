@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import { SONGS, DIALECTS, GENRES, MOODS } from "../data/mockSongs";
+import { DIALECTS, GENRES, MOODS } from "../data/mockSongs";
+import { useSongs } from "../hooks/useSongs";
 import SongCard from "./SongCard";
 
 function Select({ label, value, onChange, options }) {
