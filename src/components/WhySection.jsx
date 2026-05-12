@@ -20,7 +20,7 @@ export default function WhySection() {
       <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {ITEMS.map(({ icon: Icon, title, text }) => (
           <div key={title} className="group rounded-2xl border border-border bg-card p-6 transition hover:-translate-y-1 hover:border-primary/40">
-            <span className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-to-br from-emerald to-violet text-primary-foreground">
+            <span className="grid h-12 w-12 place-items-center rounded-xl bg-linear-to-br from-emerald to-violet text-primary-foreground">
               <Icon size={22} />
             </span>
             <h3 className="mt-5 text-lg font-semibold">{title}</h3>

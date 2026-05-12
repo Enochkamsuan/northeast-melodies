@@ -31,7 +31,7 @@ export default function GenreSection() {
                 href="#explore"
                 className="group flex items-center gap-4 rounded-2xl border border-border bg-card/70 p-5 transition hover:-translate-y-1 hover:border-primary/50"
               >
-                <span className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-to-br from-emerald/30 to-violet/30 text-primary">
+                <span className="grid h-12 w-12 place-items-center rounded-xl bg-linear-to-br from-emerald/30 to-violet/30 text-primary">
                   <Icon size={22} />
                 </span>
                 <div>

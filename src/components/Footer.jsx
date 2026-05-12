@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="mx-auto grid max-w-7xl gap-10 px-6 py-14 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-emerald to-violet text-primary-foreground">
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-linear-to-br from-emerald to-violet text-primary-foreground">
               <Music2 size={18} />
             </span>
             <span className="text-lg font-semibold">Lairik<span className="text-gradient">Beats</span></span>

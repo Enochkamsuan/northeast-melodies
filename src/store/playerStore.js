@@ -3,7 +3,9 @@ import { SONGS } from "../data/mockSongs";
 
 const KEY = "lairikbeats:nowplaying";
 
-let state = { songId: SONGS[0]?.id ?? null };
+const defaultState = { songId: SONGS[0]?.id ?? null };
+
+let state = defaultState;
 const listeners = new Set();
 
 // Hydrate from localStorage on the client
@@ -12,7 +14,9 @@ if (typeof window !== "undefined") {
     const raw = window.localStorage.getItem(KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (parsed && parsed.songId != null) state = { songId: parsed.songId };
+      if (parsed && parsed.songId != null) {
+        state = { songId: parsed.songId };
+      }
     }
   } catch {}
 }
@@ -23,9 +27,13 @@ function emit() {
 
 export function setCurrentSong(songId) {
   state = { songId };
+
   if (typeof window !== "undefined") {
-    try { window.localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
+    try {
+      window.localStorage.setItem(KEY, JSON.stringify(state));
+    } catch {}
   }
+
   emit();
 }
 
@@ -39,11 +47,14 @@ function getSnapshot() {
 }
 
 function getServerSnapshot() {
-  return { songId: SONGS[0]?.id ?? null };
+  return defaultState;
 }
 
 export function useCurrentSong() {
   const s = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-  const song = SONGS.find((x) => String(x.id) === String(s.songId)) || SONGS[0];
+
+  const song =
+    SONGS.find((x) => String(x.id) === String(s.songId)) || SONGS[0];
+
   return song;
 }
