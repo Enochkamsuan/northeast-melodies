@@ -1,6 +1,48 @@
-import { Play, Sparkles, Disc3 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Play, Pause, Sparkles, Disc3, SkipForward, SkipBack } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
+import { SONGS } from "../data/mockSongs";
+
+const TRACK_SECONDS = 248; // 4:08
+
+function fmt(sec) {
+  const m = Math.floor(sec / 60);
+  const s = String(Math.floor(sec % 60)).padStart(2, "0");
+  return `${m}:${s}`;
+}
 
 export default function Hero() {
+  const navigate = useNavigate();
+  const [index, setIndex] = useState(0);
+  const [playing, setPlaying] = useState(true);
+  const [elapsed, setElapsed] = useState(0);
+
+  const song = SONGS[index];
+
+  // Tick progress
+  useEffect(() => {
+    if (!playing) return;
+    const id = setInterval(() => {
+      setElapsed((e) => (e + 1) % TRACK_SECONDS);
+    }, 1000);
+    return () => clearInterval(id);
+  }, [playing]);
+
+  // Auto-advance when track ends
+  useEffect(() => {
+    if (elapsed === 0 && playing) return;
+    if (elapsed >= TRACK_SECONDS - 1) {
+      setIndex((i) => (i + 1) % SONGS.length);
+      setElapsed(0);
+    }
+  }, [elapsed, playing]);
+
+  const next = () => { setIndex((i) => (i + 1) % SONGS.length); setElapsed(0); };
+  const prev = () => { setIndex((i) => (i - 1 + SONGS.length) % SONGS.length); setElapsed(0); };
+  const openPlayer = () => navigate({ to: "/player/$songId", params: { songId: String(song.id) } });
+
+  const pct = (elapsed / TRACK_SECONDS) * 100;
+
   return (
     <section className="relative overflow-hidden bg-aurora">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 md:grid-cols-2 md:py-28">
@@ -43,45 +85,76 @@ export default function Hero() {
           <div className="absolute -inset-6 rounded-4xl bg-linear-to-br from-emerald/30 via-violet/30 to-tribal/30 blur-2xl" />
           <div className="relative glass rounded-3xl p-6 shadow-2xl">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-linear-to-br from-emerald to-violet">
-                  <Disc3 size={22} className="animate-spin text-primary-foreground animation-duration-[6s]" />
+              <button onClick={openPlayer} className="flex items-center gap-3 text-left">
+                <div className="grid h-12 w-12 place-items-center overflow-hidden rounded-2xl bg-linear-to-br from-emerald to-violet">
+                  {song.cover ? (
+                    <img
+                      src={song.cover}
+                      alt={song.title}
+                      className={`h-full w-full object-cover ${playing ? "animate-spin animation-duration-[6s]" : ""}`}
+                    />
+                  ) : (
+                    <Disc3 size={22} className="animate-spin text-primary-foreground animation-duration-[6s]" />
+                  )}
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-widest text-muted-foreground">Now Playing</p>
-                  <p className="font-semibold">Hingmi Khangai</p>
+                  <p className="font-semibold leading-tight">{song.title}</p>
+                  <p className="text-xs text-muted-foreground">{song.artist}</p>
                 </div>
-              </div>
-              <span className="rounded-full bg-primary/20 px-3 py-1 text-xs text-primary">Tangkhul</span>
+              </button>
+              <span className="rounded-full bg-primary/20 px-3 py-1 text-xs text-primary">{song.dialect}</span>
             </div>
 
             <div className="mt-6">
               <div className="flex h-20 items-end gap-1">
-                {Array.from({ length: 32 }).map((_, i) => (
-                  <span
-                    key={i}
-                    className="flex-1 rounded-sm bg-linear-to-t from-emerald via-violet to-tribal"
-                    style={{
-                      height: `${20 + Math.abs(Math.sin(i * 0.6)) * 80}%`,
-                      opacity: 0.5 + (i % 4) * 0.15,
-                    }}
-                  />
-                ))}
+                {Array.from({ length: 32 }).map((_, i) => {
+                  const base = 20 + Math.abs(Math.sin((i + elapsed) * 0.6)) * 80;
+                  return (
+                    <span
+                      key={i}
+                      className="flex-1 rounded-sm bg-linear-to-t from-emerald via-violet to-tribal transition-all duration-300"
+                      style={{
+                        height: `${playing ? base : 15}%`,
+                        opacity: 0.5 + (i % 4) * 0.15,
+                      }}
+                    />
+                  );
+                })}
               </div>
               <div className="mt-4 h-1 w-full overflow-hidden rounded-full bg-secondary">
-                <div className="h-full w-2/5 rounded-full bg-linear-to-r from-emerald to-violet" />
+                <div
+                  className="h-full rounded-full bg-linear-to-r from-emerald to-violet transition-[width] duration-1000 ease-linear"
+                  style={{ width: `${pct}%` }}
+                />
               </div>
               <div className="mt-2 flex justify-between text-xs text-muted-foreground">
-                <span>1:42</span><span>4:08</span>
+                <span>{fmt(elapsed)}</span><span>{fmt(TRACK_SECONDS)}</span>
               </div>
             </div>
 
-            <div className="mt-6 grid grid-cols-3 gap-3">
-              {["Gospel", "Folk", "Festive"].map((t) => (
-                <div key={t} className="rounded-xl border border-border bg-secondary/50 p-3 text-center text-xs font-medium">
-                  {t}
-                </div>
-              ))}
+            <div className="mt-6 flex items-center justify-center gap-3">
+              <button
+                onClick={prev}
+                aria-label="Previous"
+                className="grid h-10 w-10 place-items-center rounded-full border border-border text-muted-foreground transition hover:bg-secondary"
+              >
+                <SkipBack size={16} />
+              </button>
+              <button
+                onClick={() => setPlaying((v) => !v)}
+                aria-label={playing ? "Pause" : "Play"}
+                className="grid h-12 w-12 place-items-center rounded-full bg-primary text-primary-foreground shadow-lg transition hover:scale-105"
+              >
+                {playing ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" />}
+              </button>
+              <button
+                onClick={next}
+                aria-label="Next"
+                className="grid h-10 w-10 place-items-center rounded-full border border-border text-muted-foreground transition hover:bg-secondary"
+              >
+                <SkipForward size={16} />
+              </button>
             </div>
           </div>
         </div>
