@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Play, Pause, Sparkles, Disc3, SkipForward, SkipBack } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { SONGS } from "../data/mockSongs";
+import { setCurrentSong, useCurrentSong } from "../store/playerStore";
 
 const TRACK_SECONDS = 248; // 4:08
 
@@ -13,11 +14,14 @@ function fmt(sec) {
 
 export default function Hero() {
   const navigate = useNavigate();
-  const [index, setIndex] = useState(0);
+  const song = useCurrentSong();
+  const index = Math.max(0, SONGS.findIndex((s) => s.id === song.id));
   const [playing, setPlaying] = useState(true);
   const [elapsed, setElapsed] = useState(0);
 
-  const song = SONGS[index];
+  // Reset progress whenever the active song changes
+  useEffect(() => { setElapsed(0); }, [song.id]);
+
 
   // Tick progress
   useEffect(() => {
@@ -30,15 +34,14 @@ export default function Hero() {
 
   // Auto-advance when track ends
   useEffect(() => {
-    if (elapsed === 0 && playing) return;
     if (elapsed >= TRACK_SECONDS - 1) {
-      setIndex((i) => (i + 1) % SONGS.length);
-      setElapsed(0);
+      const nextSong = SONGS[(index + 1) % SONGS.length];
+      setCurrentSong(nextSong.id);
     }
-  }, [elapsed, playing]);
+  }, [elapsed, index]);
 
-  const next = () => { setIndex((i) => (i + 1) % SONGS.length); setElapsed(0); };
-  const prev = () => { setIndex((i) => (i - 1 + SONGS.length) % SONGS.length); setElapsed(0); };
+  const next = () => setCurrentSong(SONGS[(index + 1) % SONGS.length].id);
+  const prev = () => setCurrentSong(SONGS[(index - 1 + SONGS.length) % SONGS.length].id);
   const openPlayer = () => navigate({ to: "/player/$songId", params: { songId: String(song.id) } });
 
   const pct = (elapsed / TRACK_SECONDS) * 100;

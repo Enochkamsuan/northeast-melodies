@@ -1,10 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Heart, Bookmark, Shuffle, Repeat, ListMusic, Mic2,
   Play, Pause, Square, SkipBack, SkipForward,
 } from "lucide-react";
 import { SONGS } from "../data/mockSongs";
+import { setCurrentSong } from "../store/playerStore";
 
 export const Route = createFileRoute("/player/$songId")({
   component: PlayerPage,
@@ -39,6 +40,9 @@ function PlayerPage() {
 
   const index = SONGS.findIndex((s) => String(s.id) === String(songId));
   const song = index >= 0 ? SONGS[index] : SONGS[0];
+
+  // Keep the global "now playing" in sync with the visited track
+  useEffect(() => { setCurrentSong(song.id); }, [song.id]);
 
   const [playing, setPlaying] = useState(true);
   const [progress, setProgress] = useState(32);
