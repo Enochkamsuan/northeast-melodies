@@ -1,88 +1,89 @@
 import { createServerFn } from "@tanstack/react-start";
 
-let cachedToken: { value: string; expiresAt: number } | null = null;
+// We keep the file/exports named "spotify"/"getAlbumsAsSongs" to avoid touching
+// every consumer, but under the hood we use the free iTunes Search API.
+// No API key, no premium account required.
+//
+// Docs: https://performance-partners.apple.com/search-api
 
-async function getAccessToken(): Promise<string> {
-  const id = process.env.SPOTIFY_CLIENT_ID;
-  const secret = process.env.SPOTIFY_CLIENT_SECRET;
-  if (!id || !secret) throw new Error("Missing SPOTIFY_CLIENT_ID / SPOTIFY_CLIENT_SECRET");
+type ItunesTrack = {
+  trackId: number;
+  trackName: string;
+  artistName: string;
+  collectionName: string;
+  collectionId: number;
+  artworkUrl100?: string;
+  previewUrl?: string;
+  trackTimeMillis?: number;
+  primaryGenreName?: string;
+  trackViewUrl?: string;
+};
 
-  if (cachedToken && cachedToken.expiresAt > Date.now() + 30_000) {
-    return cachedToken.value;
-  }
+async function itunesSearch(term: string, limit = 25): Promise<ItunesTrack[]> {
+  const url = `https://itunes.apple.com/search?media=music&entity=song&limit=${limit}&term=${encodeURIComponent(term)}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`iTunes search failed [${res.status}]`);
+  const json = (await res.json()) as { results: ItunesTrack[] };
+  return json.results ?? [];
+}
 
-  const res = await fetch("https://accounts.spotify.com/api/token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Authorization: `Basic ${btoa(`${id}:${secret}`)}`,
-    },
-    body: "grant_type=client_credentials",
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Spotify token error [${res.status}]: ${text}`);
-  }
-  const json = (await res.json()) as { access_token: string; expires_in: number };
-  cachedToken = {
-    value: json.access_token,
-    expiresAt: Date.now() + json.expires_in * 1000,
+function toSong(t: ItunesTrack, dialect: string) {
+  const cover = (t.artworkUrl100 ?? "").replace("100x100", "600x600");
+  return {
+    id: String(t.trackId),
+    title: t.trackName,
+    artist: t.artistName,
+    dialect,
+    genre: t.primaryGenreName ?? "Album",
+    mood: "Featured",
+    cover,
+    previewUrl: t.previewUrl ?? null,
+    durationMs: t.trackTimeMillis ?? 0,
+    albumId: String(t.collectionId),
+    albumName: t.collectionName,
+    externalUrl: t.trackViewUrl ?? null,
   };
-  return cachedToken.value;
 }
 
-async function spotifyGet(path: string) {
-  const token = await getAccessToken();
-  const res = await fetch(`https://api.spotify.com/v1${path}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Spotify GET ${path} failed [${res.status}]: ${text}`);
-  }
-  return res.json();
-}
+// Northeast India search terms — feel free to edit this list.
+const SEARCH_TERMS: { term: string; dialect: string }[] = [
+  { term: "manipuri song", dialect: "Manipuri" },
+  { term: "assamese song", dialect: "Assamese" },
+  { term: "naga song", dialect: "Naga" },
+  { term: "mizo song", dialect: "Mizo" },
+  { term: "khasi song", dialect: "Khasi" },
+];
 
-// Fetch a single album: https://api.spotify.com/v1/albums/{id}
-export const getAlbum = createServerFn({ method: "GET" })
-  .inputValidator((data: { id: string }) => data)
-  .handler(async ({ data }) => {
-    return spotifyGet(`/albums/${encodeURIComponent(data.id)}`);
-  });
-
-// Fetch many albums and flatten into a single song list compatible with the UI
 export const getAlbumsAsSongs = createServerFn({ method: "GET" })
-  .inputValidator((data: { ids: string[] }) => data)
-  .handler(async ({ data }) => {
-    if (!data.ids?.length) return { songs: [] };
+  .inputValidator((data: { ids?: string[] }) => data)
+  .handler(async () => {
+    const batches = await Promise.all(
+      SEARCH_TERMS.map(async ({ term, dialect }) => {
+        try {
+          const tracks = await itunesSearch(term, 10);
+          return tracks.map((t) => toSong(t, dialect));
+        } catch {
+          return [];
+        }
+      }),
+    );
 
-    // Spotify allows up to 20 ids per /albums?ids=
-    const chunks: string[][] = [];
-    for (let i = 0; i < data.ids.length; i += 20) chunks.push(data.ids.slice(i, i + 20));
-
-    const albums: any[] = [];
-    for (const chunk of chunks) {
-      const json: any = await spotifyGet(`/albums?ids=${chunk.map(encodeURIComponent).join(",")}`);
-      if (json?.albums) albums.push(...json.albums.filter(Boolean));
-    }
-
-    const songs = albums.flatMap((album: any) => {
-      const cover = album.images?.[0]?.url ?? "";
-      return (album.tracks?.items ?? []).map((t: any) => ({
-        id: t.id,
-        title: t.name,
-        artist: (t.artists ?? []).map((a: any) => a.name).join(", "),
-        dialect: album.label ?? "Northeast",
-        genre: (album.genres && album.genres[0]) || "Album",
-        mood: "Featured",
-        cover,
-        previewUrl: t.preview_url ?? null,
-        durationMs: t.duration_ms ?? 0,
-        albumId: album.id,
-        albumName: album.name,
-        externalUrl: t.external_urls?.spotify ?? null,
-      }));
+    const seen = new Set<string>();
+    const songs = batches.flat().filter((s) => {
+      if (!s.id || seen.has(s.id)) return false;
+      seen.add(s.id);
+      return true;
     });
 
     return { songs };
+  });
+
+// Kept for API parity; not used by the UI.
+export const getAlbum = createServerFn({ method: "GET" })
+  .inputValidator((data: { id: string }) => data)
+  .handler(async ({ data }) => {
+    const url = `https://itunes.apple.com/lookup?id=${encodeURIComponent(data.id)}&entity=song`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`iTunes lookup failed [${res.status}]`);
+    return res.json();
   });
