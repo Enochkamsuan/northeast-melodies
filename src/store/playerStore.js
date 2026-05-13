@@ -41,7 +41,8 @@ function subscribe(listener) {
 }
 
 const getSnapshot = () => state;
-const getServerSnapshot = () => ({ songId: null });
+const serverState = { songId: null };
+const getServerSnapshot = () => serverState;
 
 export function useCurrentSongId() {
   return useSyncExternalStore(

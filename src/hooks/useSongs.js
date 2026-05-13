@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getAlbumsAsSongs } from "../lib/spotify.functions";
 import { ALBUM_IDS } from "../data/albumIds";
-import { SONGS as MOCK_SONGS } from "../data/mockSongs";
 
 export function useSongs() {
   const fetchSongs = useServerFn(getAlbumsAsSongs);
@@ -13,7 +12,7 @@ export function useSongs() {
     retry: 1,
   });
 
-  const songs = q.data?.songs?.length ? q.data.songs : MOCK_SONGS;
+  const songs = q.data?.songs?.length ? q.data.songs:[];
   return { songs, isLoading: q.isLoading, error: q.error };
 }
 

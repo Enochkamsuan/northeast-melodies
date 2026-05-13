@@ -21,7 +21,7 @@ export default function Navbar() {
           {links.map((l) => (
             <li key={l}>
               <a
-                href="#"
+                href={``}
                 className={
                   l === "Signup"
                     ? "rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground transition hover:opacity-90"
