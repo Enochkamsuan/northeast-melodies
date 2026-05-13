@@ -1,4 +1,4 @@
-import { FEATURED_DIALECTS } from "../data/mockSongs";
+import { FEATURED_DIALECTS } from "../data/filters";
 
 export default function DialectSection() {
   return (

@@ -1,4 +1,4 @@
-import { GENRES } from "../data/mockSongs";
+import { GENRES } from "../data/filters";
 import { Flame, Heart, Music, PartyPopper, Church, Mic2, Guitar } from "lucide-react";
 
 const ICONS = {
