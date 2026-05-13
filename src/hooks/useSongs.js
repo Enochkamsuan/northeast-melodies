@@ -12,12 +12,11 @@ export function useSongs() {
     retry: 1,
   });
 
-
-  const songs = q.data?.songs ?? [];
+  const songs = q.data?.songs?.length ? q.data.songs:[];
   return { songs, isLoading: q.isLoading, error: q.error };
 }
 
 export function useSong(songId) {
   const { songs } = useSongs();
-  return songs.find((s) => String(s.id) === String(songId)) || songs[0] || null;
+  return songs.find((s) => String(s.id) === String(songId)) || songs[0];
 }

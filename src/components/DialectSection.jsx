@@ -10,6 +10,7 @@ const gradients = [
   "from-indigo-500/30 to-blue-500/20",
   "from-teal-500/30 to-emerald-500/20",
 ];
+
 export default function DialectSection() {
   const { songs = [] } = useSongs();
 
