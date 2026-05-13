@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useSongs } from "../hooks/useSongs";
 import {
   Flame,
@@ -21,10 +22,13 @@ const ICONS = {
 
 export default function GenreSection() {
   const { songs = [] } = useSongs();
+  const [showAll,setShowAll]=useState(false);
 
   const uniqueGenres = [
     ...new Set(songs.map((song) => song.genre)),
   ].filter(Boolean);
+
+  const visibleGenres= showAll?uniqueGenres:uniqueGenres.slice(0,7)
 
   return (
     <section className="bg-aurora">
@@ -42,7 +46,7 @@ export default function GenreSection() {
         </div>
 
         <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {uniqueGenres.map((genre) => {
+          {visibleGenres.map((genre) => {
             const Icon = ICONS[genre] || Music;
 
             return (
@@ -66,6 +70,17 @@ export default function GenreSection() {
             );
           })}
         </div>
+        {uniqueGenres.length > 7 && (
+          <div className="mt-8 flex justify-center">
+            <button
+              type="button"
+              onClick={() => setShowAll(!showAll)}
+              className="rounded-full border border-border bg-card px-6 py-2 text-sm font-medium transition hover:border-primary hover:text-primary"
+            >
+              {showAll ? "Show Less" : "Show More"}
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
