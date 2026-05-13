@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import { DIALECTS, GENRES, MOODS } from "../data/mockSongs";
+import { DIALECTS, GENRES, MOODS } from "../data/filters";
 import { useSongs } from "../hooks/useSongs";
 import SongCard from "./SongCard";
 
