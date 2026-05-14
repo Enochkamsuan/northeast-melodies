@@ -156,7 +156,7 @@ function PlayerPage() {
             {/* Glow */}
             <div
               aria-hidden
-              className="absolute -inset-6 -z-10 rounded-[2rem] opacity-70 blur-2xl"
+              className="absolute -inset-6 -z-10 rounded-4xl opacity-70 blur-2xl"
               style={{
                 background:
                   "conic-gradient(from 120deg, var(--emerald), var(--violet), var(--tribal), var(--emerald))",
@@ -193,7 +193,7 @@ function PlayerPage() {
           <div className="mx-auto mt-8 max-w-xl">
             <div className="group relative h-1.5 w-full overflow-hidden rounded-full bg-secondary/60">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-[var(--emerald)] via-[var(--violet)] to-[var(--tribal)] transition-[width] duration-300"
+                className="h-full rounded-full bg-linear-to-r from-emerald via-violet to-tribal transition-[width] duration-300"
                 style={{ width: `${progress}%` }}
               />
               <input
