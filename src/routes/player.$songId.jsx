@@ -12,6 +12,10 @@ import {
   Square,
   SkipBack,
   SkipForward,
+  Volume2,
+  Share2,
+  ChevronLeft,
+  MoreHorizontal,
 } from "lucide-react";
 import { useSongs } from "../hooks/useSongs";
 import { setCurrentSong } from "../store/playerStore";
@@ -56,6 +60,7 @@ function PlayerPage() {
 
   const [playing, setPlaying] = useState(true);
   const [progress, setProgress] = useState(32);
+  const [volume, setVolume] = useState(75);
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
   const [shuffle, setShuffle] = useState(false);
@@ -71,20 +76,14 @@ function PlayerPage() {
 
   const goTo = (id) => navigate({ to: "/player/$songId", params: { songId: String(id) } });
   const next = () => {
-    if (!song || songs.length === 0) {
-      return;
-    }
+    if (!song || songs.length === 0) return;
     const i = songs.findIndex((s) => String(s.id) === String(song.id));
-    const nextSong = songs[(i + 1) % songs.length];
-
-    goTo(nextSong.id);
+    goTo(songs[(i + 1) % songs.length].id);
   };
-
   const prev = () => {
     if (!song) return;
     const i = songs.findIndex((s) => s.id === song.id);
-    const p = songs[(i - 1 + songs.length) % songs.length];
-    goTo(p.id);
+    goTo(songs[(i - 1 + songs.length) % songs.length].id);
   };
   const stop = () => {
     setPlaying(false);
@@ -99,65 +98,122 @@ function PlayerPage() {
     );
   }
 
+  const cover = song.cover || FALLBACK_COVER;
+
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-20 glass border-b border-border">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <Link to="/" className="text-lg font-bold text-gradient">
-            LairikBeats
+    <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
+      {/* Cinematic backdrop */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 scale-110 opacity-40 blur-3xl"
+        style={{
+          backgroundImage: `url(${cover})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 bg-aurora opacity-80"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10"
+        style={{
+          background:
+            "linear-gradient(180deg, color-mix(in oklab, var(--background) 40%, transparent) 0%, var(--background) 90%)",
+        }}
+      />
+
+      {/* Top bar */}
+      <header className="sticky top-0 z-20 glass border-b border-border/60">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-foreground"
+          >
+            <ChevronLeft size={16} /> Library
           </Link>
-          <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
-            ← Back to Library
-          </Link>
+          <div className="text-center">
+            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              Now Playing
+            </p>
+            <p className="truncate text-xs font-medium sm:text-sm">{song.dialect} · {song.genre}</p>
+          </div>
+          <button
+            aria-label="More"
+            className="grid h-9 w-9 place-items-center rounded-full border border-border/60 text-muted-foreground transition hover:bg-secondary"
+          >
+            <MoreHorizontal size={16} />
+          </button>
         </div>
       </header>
 
-      <main className="mx-auto grid max-w-7xl gap-8 px-6 py-10 lg:grid-cols-[1.2fr_1fr]">
+      <main className="mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 sm:py-10 lg:grid-cols-[1.15fr_1fr] lg:gap-10">
         {/* Now Playing */}
-        <section className="glass rounded-3xl">
-          <div className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-2xl bg-muted shadow-2xl shadow-primary/20">
-            <img
-              src={song.cover || FALLBACK_COVER}
-              alt={`${song.artist} — ${song.title}`}
-              className={`h-full w-full object-cover ${playing}`}
-              style={{ animationPlayState: playing ? "running" : "paused" }}
+        <section className="relative">
+          <div className="relative mx-auto w-full max-w-md">
+            {/* Glow */}
+            <div
+              aria-hidden
+              className="absolute -inset-6 -z-10 rounded-[2rem] opacity-70 blur-2xl"
+              style={{
+                background:
+                  "conic-gradient(from 120deg, var(--emerald), var(--violet), var(--tribal), var(--emerald))",
+              }}
             />
-          </div>
-
-          <div className="mt-6 text-center">
-            <h1 className="text-2xl font-bold sm:text-3xl">{song.title}</h1>
-            <p className="text-muted-foreground">{song.artist}</p>
-            <div className="mt-3 flex flex-wrap justify-center gap-1.5">
-              <span className="rounded-full bg-primary/15 px-2 py-0.5 text-[10px] font-medium text-primary">
-                {song.dialect}
-              </span>
-              <span className="rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-medium text-accent">
-                {song.genre}
-              </span>
-              <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
-                {song.mood}
-              </span>
+            <div className="relative aspect-square w-full overflow-hidden rounded-3xl border border-white/10 bg-muted shadow-2xl">
+              <img
+                src={cover}
+                alt={`${song.artist} — ${song.title}`}
+                className="h-full w-full object-cover transition-transform duration-700"
+                style={{ transform: playing ? "scale(1.04)" : "scale(1)" }}
+              />
+              {/* Vinyl ring */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/10"
+              />
             </div>
           </div>
 
+          <div className="mt-8 text-center">
+            <div className="mb-3 flex flex-wrap justify-center gap-1.5">
+              <Chip tone="primary">{song.dialect}</Chip>
+              <Chip tone="accent">{song.genre}</Chip>
+              <Chip tone="muted">{song.mood}</Chip>
+            </div>
+            <h1 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
+              {song.title}
+            </h1>
+            <p className="mt-1 text-muted-foreground">{song.artist}</p>
+          </div>
+
           {/* Progress */}
-          <div className="mt-6">
-            <input
-              type="range"
-              min={0}
-              max={100}
-              value={progress}
-              onChange={(e) => setProgress(Number(e.target.value))}
-              className="w-full accent-primary"
-            />
-            <div className="mt-1 flex justify-between text-xs text-muted-foreground">
+          <div className="mx-auto mt-8 max-w-xl">
+            <div className="group relative h-1.5 w-full overflow-hidden rounded-full bg-secondary/60">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-[var(--emerald)] via-[var(--violet)] to-[var(--tribal)] transition-[width] duration-300"
+                style={{ width: `${progress}%` }}
+              />
+              <input
+                type="range"
+                min={0}
+                max={100}
+                value={progress}
+                onChange={(e) => setProgress(Number(e.target.value))}
+                aria-label="Seek"
+                className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+              />
+            </div>
+            <div className="mt-2 flex justify-between text-[11px] tabular-nums text-muted-foreground">
               <span>{fmt(progress)}</span>
               <span>3:30</span>
             </div>
           </div>
 
           {/* Primary controls */}
-          <div className="mt-4 flex items-center justify-center gap-3">
+          <div className="mt-6 flex items-center justify-center gap-2 sm:gap-3">
             <CtrlBtn active={shuffle} onClick={() => setShuffle((v) => !v)} label="Shuffle">
               <Shuffle size={18} />
             </CtrlBtn>
@@ -167,16 +223,18 @@ function PlayerPage() {
             <button
               onClick={() => setPlaying((v) => !v)}
               aria-label={playing ? "Pause" : "Play"}
-              className="grid h-14 w-14 place-items-center rounded-full bg-primary text-primary-foreground shadow-xl transition hover:scale-105"
+              className="group relative grid h-16 w-16 place-items-center rounded-full bg-primary text-primary-foreground shadow-[0_10px_40px_-10px_var(--primary)] transition hover:scale-105 active:scale-95"
             >
-              {playing ? (
-                <Pause size={22} fill="currentColor" />
-              ) : (
-                <Play size={22} fill="currentColor" />
-              )}
+              <span
+                aria-hidden
+                className="absolute inset-0 rounded-full bg-primary opacity-50 blur-xl transition group-hover:opacity-80"
+              />
+              <span className="relative">
+                {playing ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" />}
+              </span>
             </button>
             <CtrlBtn onClick={stop} label="Stop">
-              <Square size={18} fill="currentColor" />
+              <Square size={16} fill="currentColor" />
             </CtrlBtn>
             <CtrlBtn onClick={next} label="Next">
               <SkipForward size={20} />
@@ -186,75 +244,101 @@ function PlayerPage() {
             </CtrlBtn>
           </div>
 
-          {/* Secondary actions */}
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
-            <ToggleChip
-              active={liked}
-              onClick={() => setLiked((v) => !v)}
-              icon={<Heart size={14} fill={liked ? "currentColor" : "none"} />}
-            >
-              Like
-            </ToggleChip>
-            <ToggleChip
-              active={saved}
-              onClick={() => setSaved((v) => !v)}
-              icon={<Bookmark size={14} fill={saved ? "currentColor" : "none"} />}
-            >
-              Save
-            </ToggleChip>
-            <ToggleChip
-              active={showLyrics}
-              onClick={() => setShowLyrics((v) => !v)}
-              icon={<Mic2 size={14} />}
-            >
-              Lyrics
-            </ToggleChip>
-            <ToggleChip
-              active={showQueue}
-              onClick={() => setShowQueue((v) => !v)}
-              icon={<ListMusic size={14} />}
-            >
-              Up Next
-            </ToggleChip>
+          {/* Volume + actions */}
+          <div className="mx-auto mt-6 flex max-w-xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Volume2 size={16} />
+              <input
+                type="range"
+                min={0}
+                max={100}
+                value={volume}
+                onChange={(e) => setVolume(Number(e.target.value))}
+                aria-label="Volume"
+                className="h-1 w-32 cursor-pointer accent-primary"
+              />
+              <span className="w-8 text-right text-[11px] tabular-nums">{volume}</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <ToggleChip
+                active={liked}
+                onClick={() => setLiked((v) => !v)}
+                icon={<Heart size={14} fill={liked ? "currentColor" : "none"} />}
+              >
+                Like
+              </ToggleChip>
+              <ToggleChip
+                active={saved}
+                onClick={() => setSaved((v) => !v)}
+                icon={<Bookmark size={14} fill={saved ? "currentColor" : "none"} />}
+              >
+                Save
+              </ToggleChip>
+              <ToggleChip icon={<Share2 size={14} />}>Share</ToggleChip>
+            </div>
+          </div>
+
+          {/* View switcher */}
+          <div className="mt-6 flex items-center justify-center gap-2">
+            <SegBtn active={showQueue && !showLyrics} onClick={() => { setShowQueue(true); setShowLyrics(false); }}>
+              <ListMusic size={14} /> Up Next
+            </SegBtn>
+            <SegBtn active={showLyrics && !showQueue} onClick={() => { setShowLyrics(true); setShowQueue(false); }}>
+              <Mic2 size={14} /> Lyrics
+            </SegBtn>
+            <SegBtn active={showLyrics && showQueue} onClick={() => { setShowLyrics(true); setShowQueue(true); }}>
+              Both
+            </SegBtn>
           </div>
         </section>
 
         {/* Side panel */}
         <aside className="space-y-6">
           {showLyrics && (
-            <div className="glass rounded-2xl p-6">
-              <h2 className="mb-3 flex items-center gap-2 font-semibold">
-                <Mic2 size={16} /> Lyrics
+            <div className="glass rounded-3xl p-6">
+              <h2 className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                <Mic2 size={14} /> Lyrics
               </h2>
-              <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-muted-foreground">
+              <pre className="whitespace-pre-wrap font-sans text-base leading-relaxed text-foreground/90">
                 {MOCK_LYRICS.join("\n")}
               </pre>
             </div>
           )}
           {showQueue && (
-            <div className="glass rounded-2xl p-6">
-              <h2 className="mb-3 flex items-center gap-2 font-semibold">
-                <ListMusic size={16} /> Up Next
-              </h2>
-              <ul className="divide-y divide-border">
-                {queue.slice(0, 8).map((s) => (
+            <div className="glass rounded-3xl p-6">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                  <ListMusic size={14} /> Up Next
+                </h2>
+                <span className="text-[11px] text-muted-foreground">{queue.length} tracks</span>
+              </div>
+              <ul className="space-y-1">
+                {queue.slice(0, 10).map((s, i) => (
                   <li key={s.id}>
                     <button
                       onClick={() => goTo(s.id)}
-                      className="flex w-full items-center gap-3 py-2.5 text-left transition hover:bg-secondary/40 rounded-lg px-2"
+                      className="group flex w-full items-center gap-3 rounded-xl px-2 py-2 text-left transition hover:bg-secondary/60"
                     >
-                      <img
-                        src={s.cover || FALLBACK_COVER}
-                        alt=""
-                        className="h-10 w-10 rounded-md object-cover"
-                      />
+                      <span className="w-5 text-right text-xs tabular-nums text-muted-foreground">
+                        {i + 1}
+                      </span>
+                      <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-lg">
+                        <img
+                          src={s.cover || FALLBACK_COVER}
+                          alt=""
+                          className="h-full w-full object-cover"
+                        />
+                        <div className="absolute inset-0 grid place-items-center bg-black/40 opacity-0 transition group-hover:opacity-100">
+                          <Play size={14} className="text-white" fill="currentColor" />
+                        </div>
+                      </div>
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-medium">{s.title}</p>
                         <p className="truncate text-xs text-muted-foreground">
                           {s.artist} · {s.dialect}
                         </p>
                       </div>
-                      <Play size={14} className="text-muted-foreground" />
+                      <span className="text-[11px] tabular-nums text-muted-foreground">3:30</span>
                     </button>
                   </li>
                 ))}
@@ -267,13 +351,30 @@ function PlayerPage() {
   );
 }
 
+function Chip({ children, tone = "muted" }) {
+  const tones = {
+    primary: "bg-primary/15 text-primary",
+    accent: "bg-accent/15 text-accent",
+    muted: "bg-secondary text-muted-foreground",
+  };
+  return (
+    <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider ${tones[tone]}`}>
+      {children}
+    </span>
+  );
+}
+
 function CtrlBtn({ children, onClick, active, label }) {
   return (
     <button
       onClick={onClick}
       aria-label={label}
       aria-pressed={!!active}
-      className={`grid h-10 w-10 place-items-center rounded-full border border-border transition hover:bg-secondary ${active ? "text-primary border-primary/50" : "text-muted-foreground"}`}
+      className={`grid h-11 w-11 place-items-center rounded-full border transition hover:scale-105 hover:bg-secondary ${
+        active
+          ? "border-primary/60 bg-primary/10 text-primary"
+          : "border-border/60 text-muted-foreground"
+      }`}
     >
       {children}
     </button>
@@ -287,7 +388,7 @@ function ToggleChip({ children, icon, active, onClick }) {
       className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition ${
         active
           ? "border-primary/50 bg-primary/15 text-primary"
-          : "border-border text-muted-foreground hover:bg-secondary"
+          : "border-border/60 text-muted-foreground hover:bg-secondary"
       }`}
     >
       {icon}
@@ -296,8 +397,23 @@ function ToggleChip({ children, icon, active, onClick }) {
   );
 }
 
+function SegBtn({ children, active, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium transition ${
+        active
+          ? "bg-foreground text-background"
+          : "text-muted-foreground hover:bg-secondary"
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
 function fmt(pct) {
-  const total = 210; // 3:30
+  const total = 210;
   const sec = Math.round((pct / 100) * total);
   const m = Math.floor(sec / 60);
   const s = String(sec % 60).padStart(2, "0");
