@@ -2,8 +2,7 @@ import { Play } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { setCurrentSong } from "../store/playerStore";
 
-const FALLBACK_COVER =
-  "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=600&q=80";
+const FALLBACK_COVER = "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=600&q=80";
 
 export default function SongCard({ song }) {
   const cover = song.cover || FALLBACK_COVER;
@@ -27,7 +26,10 @@ export default function SongCard({ song }) {
         <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-70" />
         <button
           aria-label={`Play ${song.title}`}
-          onClick={(e) => { e.stopPropagation(); open(); }}
+          onClick={(e) => {
+            e.stopPropagation();
+            open();
+          }}
           className="absolute bottom-3 right-3 grid h-12 w-12 translate-y-3 place-items-center rounded-full bg-primary text-primary-foreground opacity-0 shadow-xl transition-all group-hover:translate-y-0 group-hover:opacity-100"
         >
           <Play size={18} fill="currentColor" />
@@ -37,9 +39,15 @@ export default function SongCard({ song }) {
         <h3 className="truncate font-semibold">{song.title}</h3>
         <p className="truncate text-sm text-muted-foreground">{song.artist}</p>
         <div className="mt-3 flex flex-wrap gap-1.5">
-          <span className="rounded-full bg-primary/15 px-2 py-0.5 text-[10px] font-medium text-primary">{song.dialect}</span>
-          <span className="rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-medium text-accent">{song.genre}</span>
-          <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground">{song.mood}</span>
+          <span className="rounded-full bg-primary/15 px-2 py-0.5 text-[10px] font-medium text-primary">
+            {song.dialect}
+          </span>
+          <span className="rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-medium text-accent">
+            {song.genre}
+          </span>
+          <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+            {song.mood}
+          </span>
         </div>
       </div>
     </article>

@@ -9,28 +9,55 @@ export default function Footer() {
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-linear-to-br from-emerald to-violet text-primary-foreground">
               <Music2 size={18} />
             </span>
-            <span className="text-lg font-semibold">Lairik<span className="text-gradient">Beats</span></span>
+            <span className="text-lg font-semibold">
+              Lairik<span className="text-gradient">Beats</span>
+            </span>
           </div>
           <p className="mt-4 max-w-md text-sm text-muted-foreground">
-            Streaming the sounds of Nagaland, Manipur and the wider Northeast — one dialect at a time.
+            Streaming the sounds of Nagaland, Manipur and the wider Northeast — one dialect at a
+            time.
           </p>
         </div>
 
         <div>
           <p className="text-sm font-semibold">Explore</p>
           <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-            <li><a href="#explore" className="hover:text-foreground">Library</a></li>
-            <li><a href="#dialects" className="hover:text-foreground">Dialects</a></li>
-            <li><a href="#" className="hover:text-foreground">Genres</a></li>
+            <li>
+              <a href="#explore" className="hover:text-foreground">
+                Library
+              </a>
+            </li>
+            <li>
+              <a href="#dialects" className="hover:text-foreground">
+                Dialects
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-foreground">
+                Genres
+              </a>
+            </li>
           </ul>
         </div>
 
         <div>
           <p className="text-sm font-semibold">Account</p>
           <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-            <li><a href="#" className="hover:text-foreground">Login</a></li>
-            <li><a href="#" className="hover:text-foreground">Signup</a></li>
-            <li><a href="#" className="hover:text-foreground">Logout</a></li>
+            <li>
+              <a href="#" className="hover:text-foreground">
+                Login
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-foreground">
+                Signup
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-foreground">
+                Logout
+              </a>
+            </li>
           </ul>
         </div>
       </div>

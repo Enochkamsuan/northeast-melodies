@@ -15,32 +15,23 @@ export default function DialectSection() {
   const { songs = [] } = useSongs();
 
   // unique dialects only
-  const dialects = [
-    ...new Set(songs.map((song) => song.dialect)),
-  ].filter(Boolean);
+  const dialects = [...new Set(songs.map((song) => song.dialect))].filter(Boolean);
 
   return (
-    <section
-      id="dialects"
-      className="mx-auto max-w-7xl px-6 py-20"
-    >
+    <section id="dialects" className="mx-auto max-w-7xl px-6 py-20">
       <div className="flex items-end justify-between">
         <div>
-          <h2 className="text-3xl font-bold sm:text-4xl">
-            Featured Dialects
-          </h2>
+          <h2 className="text-3xl font-bold sm:text-4xl">Featured Dialects</h2>
 
           <p className="mt-2 text-muted-foreground">
-            Voices from the hills, valleys and rivers of the
-            Northeast.
+            Voices from the hills, valleys and rivers of the Northeast.
           </p>
         </div>
       </div>
 
       <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {dialects.map((dialect, index) => {
-          const gradient =
-            gradients[index % gradients.length];
+          const gradient = gradients[index % gradients.length];
 
           return (
             <a
@@ -54,9 +45,7 @@ export default function DialectSection() {
                 Northeast Music
               </p>
 
-              <p className="mt-2 text-2xl font-bold">
-                {dialect}
-              </p>
+              <p className="mt-2 text-2xl font-bold">{dialect}</p>
 
               <span className="absolute bottom-4 right-5 text-sm font-medium text-foreground/70 transition group-hover:text-foreground">
                 Listen →

@@ -16,11 +16,18 @@ export default function Hero() {
   const navigate = useNavigate();
   const { songs } = useSongs();
   const song = useCurrentSong(songs);
-  const index = song ? Math.max(0, songs.findIndex((s) => s.id === song.id)) : 0;
+  const index = song
+    ? Math.max(
+        0,
+        songs.findIndex((s) => s.id === song.id),
+      )
+    : 0;
   const [playing, setPlaying] = useState(true);
   const [elapsed, setElapsed] = useState(0);
 
-  useEffect(() => { setElapsed(0); }, [song?.id]);
+  useEffect(() => {
+    setElapsed(0);
+  }, [song?.id]);
 
   useEffect(() => {
     if (!playing) return;
@@ -58,8 +65,8 @@ export default function Hero() {
             Discover <span className="text-gradient">Northeast Indian</span> Music
           </h1>
           <p className="mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">
-            Stream and explore songs by dialect, genre and mood — from Tangkhul gospel
-            to Manipuri pop, Rongmei festival drums to Nagamese street soul.
+            Stream and explore songs by dialect, genre and mood — from Tangkhul gospel to Manipuri
+            pop, Rongmei festival drums to Nagamese street soul.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <a
@@ -76,11 +83,23 @@ export default function Hero() {
             </a>
           </div>
           <div className="mt-10 flex items-center gap-6 text-xs text-muted-foreground">
-            <div><span className="text-xl font-bold text-foreground">7+</span><br />Dialects</div>
+            <div>
+              <span className="text-xl font-bold text-foreground">7+</span>
+              <br />
+              Dialects
+            </div>
             <div className="h-8 w-px bg-border" />
-            <div><span className="text-xl font-bold text-foreground">200+</span><br />Mock tracks</div>
+            <div>
+              <span className="text-xl font-bold text-foreground">200+</span>
+              <br />
+              Mock tracks
+            </div>
             <div className="h-8 w-px bg-border" />
-            <div><span className="text-xl font-bold text-foreground">∞</span><br />Stories</div>
+            <div>
+              <span className="text-xl font-bold text-foreground">∞</span>
+              <br />
+              Stories
+            </div>
           </div>
         </div>
 
@@ -97,16 +116,23 @@ export default function Hero() {
                       className={`h-full w-full object-cover ${playing ? "animate-spin animation-duration-[6s]" : ""}`}
                     />
                   ) : (
-                    <Disc3 size={22} className="animate-spin text-primary-foreground animation-duration-[6s]" />
+                    <Disc3
+                      size={22}
+                      className="animate-spin text-primary-foreground animation-duration-[6s]"
+                    />
                   )}
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground">Now Playing</p>
+                  <p className="text-xs uppercase tracking-widest text-muted-foreground">
+                    Now Playing
+                  </p>
                   <p className="font-semibold leading-tight">{song.title}</p>
                   <p className="text-xs text-muted-foreground">{song.artist}</p>
                 </div>
               </button>
-              <span className="rounded-full bg-primary/20 px-3 py-1 text-xs text-primary">{song.dialect}</span>
+              <span className="rounded-full bg-primary/20 px-3 py-1 text-xs text-primary">
+                {song.dialect}
+              </span>
             </div>
 
             <div className="mt-6">
@@ -132,7 +158,8 @@ export default function Hero() {
                 />
               </div>
               <div className="mt-2 flex justify-between text-xs text-muted-foreground">
-                <span>{fmt(elapsed)}</span><span>{fmt(TRACK_SECONDS)}</span>
+                <span>{fmt(elapsed)}</span>
+                <span>{fmt(TRACK_SECONDS)}</span>
               </div>
             </div>
 
@@ -149,7 +176,11 @@ export default function Hero() {
                 aria-label={playing ? "Pause" : "Play"}
                 className="grid h-12 w-12 place-items-center rounded-full bg-primary text-primary-foreground shadow-lg transition hover:scale-105"
               >
-                {playing ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" />}
+                {playing ? (
+                  <Pause size={18} fill="currentColor" />
+                ) : (
+                  <Play size={18} fill="currentColor" />
+                )}
               </button>
               <button
                 onClick={next}

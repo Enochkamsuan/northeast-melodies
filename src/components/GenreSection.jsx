@@ -1,14 +1,6 @@
 import { useState } from "react";
 import { useSongs } from "../hooks/useSongs";
-import {
-  Flame,
-  Heart,
-  Music,
-  PartyPopper,
-  Church,
-  Mic2,
-  Guitar,
-} from "lucide-react";
+import { Flame, Heart, Music, PartyPopper, Church, Mic2, Guitar } from "lucide-react";
 
 const ICONS = {
   Gospel: Church,
@@ -22,22 +14,18 @@ const ICONS = {
 
 export default function GenreSection() {
   const { songs = [] } = useSongs();
-  const [showAll,setShowAll]=useState(false);
+  const [showAll, setShowAll] = useState(false);
 
-  const uniqueGenres = [
-    ...new Set(songs.map((song) => song.genre)),
-  ].filter(Boolean);
+  const uniqueGenres = [...new Set(songs.map((song) => song.genre))].filter(Boolean);
 
-  const visibleGenres= showAll?uniqueGenres:uniqueGenres.slice(0,7)
+  const visibleGenres = showAll ? uniqueGenres : uniqueGenres.slice(0, 7);
 
   return (
     <section className="bg-aurora">
       <div className="mx-auto max-w-7xl px-6 py-20">
         <div className="flex items-end justify-between">
           <div>
-            <h2 className="text-3xl font-bold sm:text-4xl">
-              Popular Genres
-            </h2>
+            <h2 className="text-3xl font-bold sm:text-4xl">Popular Genres</h2>
 
             <p className="mt-2 text-muted-foreground">
               From Sunday hymns to Saturday parties — pick your vibe.
@@ -62,9 +50,7 @@ export default function GenreSection() {
                 <div>
                   <p className="font-semibold">{genre}</p>
 
-                  <p className="text-xs text-muted-foreground">
-                    Curated playlist
-                  </p>
+                  <p className="text-xs text-muted-foreground">Curated playlist</p>
                 </div>
               </a>
             );

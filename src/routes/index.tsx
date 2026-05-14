@@ -12,7 +12,11 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "LairikBeats — Northeast Indian Music Streaming" },
-      { name: "description", content: "Discover and stream Northeast Indian music by dialect, genre and mood — Nagamese, Manipuri, Tangkhul, Kuki, Rongmei, Liangmei and Zeme." },
+      {
+        name: "description",
+        content:
+          "Discover and stream Northeast Indian music by dialect, genre and mood — Nagamese, Manipuri, Tangkhul, Kuki, Rongmei, Liangmei and Zeme.",
+      },
     ],
   }),
 });

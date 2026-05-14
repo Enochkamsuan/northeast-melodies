@@ -112,10 +112,7 @@ function PlayerPage() {
           backgroundPosition: "center",
         }}
       />
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-10 bg-aurora opacity-80"
-      />
+      <div aria-hidden className="absolute inset-0 -z-10 bg-aurora opacity-80" />
       <div
         aria-hidden
         className="absolute inset-0 -z-10"
@@ -171,9 +168,7 @@ function PlayerPage() {
               <Chip tone="accent">{song.genre}</Chip>
               <Chip tone="muted">{song.mood}</Chip>
             </div>
-            <h1 className="text-balance text-base font-bold tracking-tight">
-              {song.title}
-            </h1>
+            <h1 className="text-balance text-base font-bold tracking-tight">{song.title}</h1>
             <p className="mt-1 text-muted-foreground">{song.artist}</p>
           </div>
 
@@ -218,7 +213,11 @@ function PlayerPage() {
                 className="absolute inset-0 rounded-full bg-primary opacity-50 blur-xl transition group-hover:opacity-80"
               />
               <span className="relative">
-                {playing ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" />}
+                {playing ? (
+                  <Pause size={24} fill="currentColor" />
+                ) : (
+                  <Play size={24} fill="currentColor" />
+                )}
               </span>
             </button>
             <CtrlBtn onClick={stop} label="Stop">
@@ -268,13 +267,31 @@ function PlayerPage() {
 
           {/* View switcher */}
           <div className="mt-6 flex items-center justify-center gap-2">
-            <SegBtn active={showQueue && !showLyrics} onClick={() => { setShowQueue(true); setShowLyrics(false); }}>
+            <SegBtn
+              active={showQueue && !showLyrics}
+              onClick={() => {
+                setShowQueue(true);
+                setShowLyrics(false);
+              }}
+            >
               <ListMusic size={14} /> Up Next
             </SegBtn>
-            <SegBtn active={showLyrics && !showQueue} onClick={() => { setShowLyrics(true); setShowQueue(false); }}>
+            <SegBtn
+              active={showLyrics && !showQueue}
+              onClick={() => {
+                setShowLyrics(true);
+                setShowQueue(false);
+              }}
+            >
               <Mic2 size={14} /> Lyrics
             </SegBtn>
-            <SegBtn active={showLyrics && showQueue} onClick={() => { setShowLyrics(true); setShowQueue(true); }}>
+            <SegBtn
+              active={showLyrics && showQueue}
+              onClick={() => {
+                setShowLyrics(true);
+                setShowQueue(true);
+              }}
+            >
               Both
             </SegBtn>
           </div>
@@ -344,7 +361,9 @@ function Chip({ children, tone = "muted" }) {
     muted: "bg-secondary text-muted-foreground",
   };
   return (
-    <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider ${tones[tone]}`}>
+    <span
+      className={`rounded-full px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider ${tones[tone]}`}
+    >
       {children}
     </span>
   );
@@ -388,9 +407,7 @@ function SegBtn({ children, active, onClick }) {
     <button
       onClick={onClick}
       className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium transition ${
-        active
-          ? "bg-foreground text-background"
-          : "text-muted-foreground hover:bg-secondary"
+        active ? "bg-foreground text-background" : "text-muted-foreground hover:bg-secondary"
       }`}
     >
       {children}

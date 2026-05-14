@@ -20,7 +20,6 @@ export default function Navbar() {
     };
   }, []);
 
-  // Welcome-back toast when an existing session is found
   useEffect(() => {
     if (!user) return;
     const flagKey = "lairikbeats.welcomed";

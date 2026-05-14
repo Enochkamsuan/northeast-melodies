@@ -30,7 +30,7 @@ export default function SearchMusic() {
   const [mood, setMood] = useState("");
 
   const { songs = [], isLoading } = useSongs();
- 
+
   const dialectOptions = useMemo(() => {
     return [...new Set(songs.map((s) => s.dialect).filter(Boolean))];
   }, [songs]);
@@ -47,9 +47,7 @@ export default function SearchMusic() {
     return songs.filter((s) => {
       const searchText = `${s.title} ${s.artist}`.toLowerCase();
 
-      const matchQ = q
-        ? searchText.includes(q.toLowerCase())
-        : true;
+      const matchQ = q ? searchText.includes(q.toLowerCase()) : true;
 
       return (
         matchQ &&
@@ -64,9 +62,7 @@ export default function SearchMusic() {
     <section id="explore" className="mx-auto max-w-7xl px-6 py-20">
       <div className="flex flex-col items-start justify-between gap-3 md:flex-row md:items-end">
         <div>
-          <h2 className="text-3xl font-bold sm:text-4xl">
-            Explore the Library
-          </h2>
+          <h2 className="text-3xl font-bold sm:text-4xl">Explore the Library</h2>
           <p className="mt-2 max-w-xl text-muted-foreground">
             Filter by dialect, genre or mood to find your next favorite track.
           </p>
@@ -100,27 +96,13 @@ export default function SearchMusic() {
             options={dialectOptions}
           />
 
-          <Select
-            label="Genre"
-            value={genre}
-            onChange={setGenre}
-            options={genreOptions}
-          />
+          <Select label="Genre" value={genre} onChange={setGenre} options={genreOptions} />
 
-          <Select
-            label="Mood"
-            value={mood}
-            onChange={setMood}
-            options={moodOptions}
-          />
+          <Select label="Mood" value={mood} onChange={setMood} options={moodOptions} />
         </div>
       </div>
 
-      {isLoading && (
-        <p className="mt-12 text-center text-muted-foreground">
-          Loading songs...
-        </p>
-      )}
+      {isLoading && <p className="mt-12 text-center text-muted-foreground">Loading songs...</p>}
 
       <div className="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
         {results.map((s, i) => (
@@ -129,9 +111,7 @@ export default function SearchMusic() {
       </div>
 
       {!isLoading && results.length === 0 && (
-        <p className="mt-12 text-center text-muted-foreground">
-          No songs match your filters yet.
-        </p>
+        <p className="mt-12 text-center text-muted-foreground">No songs match your filters yet.</p>
       )}
     </section>
   );

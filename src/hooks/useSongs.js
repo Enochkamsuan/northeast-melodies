@@ -12,7 +12,7 @@ export function useSongs() {
     retry: 1,
   });
 
-  const songs = q.data?.songs?.length ? q.data.songs:[];
+  const songs = q.data?.songs?.length ? q.data.songs : [];
   return { songs, isLoading: q.isLoading, error: q.error };
 }
 
