@@ -3,6 +3,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { saveUser } from "../lib/auth";
 import Navbar from "../components/Navbar.jsx";
+import { Eye, EyeOff } from "lucide-react";
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/login")({
 function LoginPage() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
 
   function onSubmit(e) {
     e.preventDefault();
@@ -51,12 +53,23 @@ function LoginPage() {
           </label>
           <label className="block">
             <span className="mb-1 block text-xs font-medium text-muted-foreground">Password</span>
-            <input
-              type="password"
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-              className="w-full rounded-lg border border-border bg-background/60 px-3 py-2 text-sm outline-none transition focus:border-primary"
-            />
+
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                className="w-full rounded-lg border border-border bg-background/60 px-3 py-2 pr-10 text-sm outline-none transition focus:border-primary"
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
           </label>
           <button
             type="submit"
