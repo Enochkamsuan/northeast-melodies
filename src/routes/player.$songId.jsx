@@ -127,25 +127,13 @@ function PlayerPage() {
 
       {/* Top bar */}
       <header className="sticky top-0 z-20 glass border-b border-border/60">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
+        <div className="max-w-7xl px-4 py-3 sm:px-6 sm:py-4">
           <Link
             to="/"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-foreground"
           >
             <ChevronLeft size={16} /> Library
           </Link>
-          <div className="text-center">
-            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Now Playing
-            </p>
-            <p className="truncate text-xs font-medium sm:text-sm">{song.dialect} · {song.genre}</p>
-          </div>
-          <button
-            aria-label="More"
-            className="grid h-9 w-9 place-items-center rounded-full border border-border/60 text-muted-foreground transition hover:bg-secondary"
-          >
-            <MoreHorizontal size={16} />
-          </button>
         </div>
       </header>
 
@@ -162,11 +150,11 @@ function PlayerPage() {
                   "conic-gradient(from 120deg, var(--emerald), var(--violet), var(--tribal), var(--emerald))",
               }}
             />
-            <div className="relative aspect-square w-full overflow-hidden rounded-3xl border border-white/10 bg-muted shadow-2xl">
+            <div className="relative w-full overflow-hidden rounded-3xl border border-white/10 bg-muted shadow-2xl">
               <img
                 src={cover}
                 alt={`${song.artist} — ${song.title}`}
-                className="h-full w-full object-cover transition-transform duration-700"
+                className="max-h-64 w-full object-cover transition-transform duration-700"
                 style={{ transform: playing ? "scale(1.04)" : "scale(1)" }}
               />
               {/* Vinyl ring */}
@@ -183,7 +171,7 @@ function PlayerPage() {
               <Chip tone="accent">{song.genre}</Chip>
               <Chip tone="muted">{song.mood}</Chip>
             </div>
-            <h1 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
+            <h1 className="text-balance text-base font-bold tracking-tight">
               {song.title}
             </h1>
             <p className="mt-1 text-muted-foreground">{song.artist}</p>
@@ -291,8 +279,6 @@ function PlayerPage() {
             </SegBtn>
           </div>
         </section>
-
-        {/* Side panel */}
         <aside className="space-y-6">
           {showLyrics && (
             <div className="glass rounded-3xl p-6">
@@ -312,7 +298,7 @@ function PlayerPage() {
                 </h2>
                 <span className="text-[11px] text-muted-foreground">{queue.length} tracks</span>
               </div>
-              <ul className="space-y-1">
+              <ul className="space-y-1 max-h-96 overflow-y-auto">
                 {queue.slice(0, 10).map((s, i) => (
                   <li key={s.id}>
                     <button
